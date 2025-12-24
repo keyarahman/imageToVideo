@@ -1,98 +1,140 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+} from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const MODES = [
+  {
+    id: 'transition',
+    title: 'Transition',
+    description: 'Upload two frames and describe the transition between them.',
+    image: require('@/assets/images/react-logo.png'),
+  },
+  {
+    id: 'text-to-video',
+    title: 'Text to Video',
+    description: 'Describe your imagined scene and watch it transform into an animated video.',
+    image: require('@/assets/images/react-logo.png'),
+  },
+  {
+    id: 'fusion',
+    title: 'Fusion',
+    description:
+      'Upload or select 1–3 subjects/backgrounds and describe their interaction to create a video.',
+    image: require('@/assets/images/react-logo.png'),
+  },
+];
 
-export default function HomeScreen() {
+export default function ModesScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.topBar}>
+          <Text style={styles.timeText}>3:50</Text>
+          <View style={styles.creditsPill}>
+            <Text style={styles.creditsText}>50 credits</Text>
+          </View>
+        </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <Text style={styles.sectionTitle}>Modes</Text>
+
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}>
+          {MODES.map((mode) => (
+            <View key={mode.id} style={styles.cardWrapper}>
+              <ImageBackground
+                source={mode.image}
+                style={styles.cardImage}
+                imageStyle={styles.cardImageRadius}>
+                <View style={styles.cardOverlay}>
+                  <View style={styles.cardTextContainer}>
+                    <Text style={styles.cardTitle}>{mode.title}</Text>
+                    <Text style={styles.cardDescription}>{mode.description}</Text>
+                  </View>
+                </View>
+              </ImageBackground>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#040714',
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  topBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    marginTop: 8,
+    marginBottom: 16,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  timeText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  creditsPill: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+  },
+  creditsText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#ffffff',
+    marginBottom: 12,
+  },
+  scrollContent: {
+    paddingBottom: 120,
+  },
+  cardWrapper: {
+    marginBottom: 16,
+  },
+  cardImage: {
+    height: 220,
+    width: '100%',
+  },
+  cardImageRadius: {
+    borderRadius: 20,
+  },
+  cardOverlay: {
+    flex: 1,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    justifyContent: 'flex-end',
+  },
+  cardTextContainer: {
+    padding: 16,
+  },
+  cardTitle: {
+    color: '#ffffff',
+    fontSize: 22,
+    fontWeight: '800',
+    marginBottom: 4,
+  },
+  cardDescription: {
+    color: '#f3f3f3',
+    fontSize: 14,
   },
 });
